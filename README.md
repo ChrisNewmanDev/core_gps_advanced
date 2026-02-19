@@ -4,7 +4,16 @@ https://buymeacoffee.com/core_scripts
 
 # Core GPS Advanced
 
-An advanced FiveM GPS Marker script for QB-Core framework featuring **device-based storage** where each GPS device has its own unique ID and saved locations.
+An advanced FiveM GPS Marker script with **multi-framework support** (QBCore, ESX, ESX Extended, Qbox) featuring **device-based storage** where each GPS device has its own unique ID and saved locations.
+
+## 🎯 Framework Support
+
+- ✅ **QBCore** - Full support
+- ✅ **ESX** - Full support (works with both old ESX and ESX Legacy)
+- ✅ **ESX Extended** - Full support
+- ✅ **Qbox** - Full support
+
+**Easy Configuration:** Just set `Config.Framework` in `config.lua` to your framework!
 
 ## Some Screenshots
 
@@ -29,103 +38,84 @@ An advanced FiveM GPS Marker script for QB-Core framework featuring **device-bas
 - **Device Trading** - GPS devices can be traded between players (with their saved locations)
 
 ### Location Management
-- 📍 **Mark Current Location** - Save your current position with custom labels
-- 🗺️ **Visual Map Markers** - See all markers saved on your GPS device on the map
-- 🔄 **Toggle Markers** - Show/hide all markers with one click
-- 🚩 **Set Waypoints** - Quickly navigate to saved locations
-- 🗑️ **Remove Markers** - Delete markers with confirmation dialog
-- 💾 **Persistent Storage** - All data saved to database via oxmysql
+   **Mark Current Location** - Save your current position with custom labels
+   **Visual Map Markers** - See all markers saved on your GPS device on the map
+   **Toggle Markers** - Show/hide all markers with one click
+   **Set Waypoints** - Quickly navigate to saved locations
+   **Remove Markers** - Delete markers with confirmation dialog
+   **Persistent Storage** - All data saved to database via oxmysql
 
 ### Sharing System
-- 📤 **Share Locations** - Share specific markers with other players
-- ✅ **Accept/Decline System** - Receivers get a popup to accept or decline shared locations
-- 📋 **Location Preview** - See location details before accepting
-- 🎯 **Smart Validation** - Requires GPS device to accept shared locations
+   **Share Locations** - Share specific markers with other players
+   **Accept/Decline System** - Receivers get a popup to accept or decline shared locations
+   **Location Preview** - See location details before accepting
+   **Smart Validation** - Requires GPS device to accept shared locations
 
 ### Item-Based Display
-- 🎒 **GPS Required** - Markers only display when GPS device is in inventory
-- 🔄 **Auto Detection** - Automatically detects when GPS is added/removed
-- 📱 **Device Switching** - Switching GPS devices loads that device's markers
-- ⚡ **Event-Driven** - No polling, uses proper inventory events
+   **GPS Required** - Markers only display when GPS device is in inventory
+   **Auto Detection** - Automatically detects when GPS is added/removed
+   **Device Switching** - Switching GPS devices loads that device's markers
+   **Event-Driven** - No polling, uses proper inventory events
 
 ### User Interface
-- 🎨 **Modern UI** - Clean, radio-style interface
-- 📊 **Marker Counter** - Shows how many locations are saved
-- 🎯 **GPS ID Display** - Shows current device ID
-- 🌙 **Dark Theme** - Easy on the eyes
-- ⌨️ **Keyboard Shortcuts** - ESC to close, Enter to submit
+   **Modern UI** - Clean, radio-style interface
+   **Marker Counter** - Shows how many locations are saved
+   **GPS ID Display** - Shows current device ID
+   **Dark Theme** - Easy on the eyes
+   **Keyboard Shortcuts** - ESC to close, Enter to submit
 
 ## 📋 Requirements
 
-- [QBCore Framework](https://github.com/qbcore-framework/qb-core)
-- [oxmysql](https://github.com/overextended/oxmysql)
+   **One of the following frameworks:**
+      - [QBCore Framework](https://github.com/qbcore-framework/qb-core)
+      - [ESX Legacy](https://github.com/esx-framework/esx-legacy)
+      - [Qbox](https://github.com/Qbox-project/qbx-core)
+
+   **Mandatiory for all frameworks**
+      - [oxmysql](https://github.com/overextended/oxmysql) - Required for all frameworks
 
 ## 🔧 Installation
 
-### 1. Database Setup
+### Quick Start
 
-Run the SQL file located in `install/core_gps_advanced.sql`:
+1. **Add the resource**
+   - Copy the `core_gps_advanced` folder to your server's `resources` directory
 
-```sql
-CREATE TABLE IF NOT EXISTS `core_gps_advanced` (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
-    `gps_id` varchar(100) NOT NULL,
-    `label` varchar(100) NOT NULL,
-    `coords` longtext NOT NULL,
-    `street` varchar(255) DEFAULT NULL,
-    `timestamp` bigint(20) DEFAULT NULL,
-    `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-    PRIMARY KEY (`id`),
-    KEY `gps_id` (`gps_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+2. **Set your framework** in `config.lua`:
+   ```lua
+   Config.Framework = 'qbcore'  -- Options: 'qbcore', 'esx', 'qbox'
+   ```
 
-CREATE TABLE IF NOT EXISTS `core_gps_advanced_devices` (
-    `gps_id` varchar(100) NOT NULL,
-    `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-    PRIMARY KEY (`gps_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+3. **Import the SQL file** to your database:
+   - Run `install/core_gps_advanced.sql`
+   - Works for all frameworks (QBCore, ESX, Qbox)
+
+4. **Add the item** to your framework - See detailed instructions in `install/INSTALLATION.md` or `install/item_examples.lua`
+
+5. **Add to server.cfg**:
+   ```cfg
+   ensure oxmysql
+   ensure core_gps_advanced
+   ```
+
+6. **Restart your server** and enjoy!
+
+**For ESX:** See `install/item_examples.lua` for ESX-specific configuration (differs between ESX Legacy and older versions)
+
+**For Qbox:** Add to `qbx-core/shared/items.lua` (requires ox_inventory)
+
+**Important:** The item MUST be set as `unique = true` (or `stack = false` for ox_inventory) to support metadata (GPS ID storage).
+
+## 🎮 Admin Commands
+
+All frameworks support:
 ```
-
-### 2. Add the Resource
-
-1. Copy the `core_gps_advanced` folder to your server's `resources` directory
-2. Ensure `oxmysql` is installed and running
-3. Add to your `server.cfg`:
-```cfg
-ensure oxmysql
-ensure core_gps_advanced
+/givegpsa - Give yourself a GPS device (Admin only)
 ```
-
-### 3. Add the Item
-
-Add this item to your `qb-core/shared/items.lua`:
-
-```lua
-core_gps_a = {
-    name = 'core_gps_a',
-    label = 'GPS Advanced',
-    weight = 200,
-    type = 'item',
-    image = 'core_gps_advanced.png',
-    unique = true,
-    useable = true,
-    shouldClose = true,
-    combinable = nil,
-    description = 'A GPS device for marking and managing locations'
-}
-```
-
-**Important:** The item MUST be set as `unique = true` to support metadata (GPS ID storage).
-
 
 ## 🔄 Automatic Update Checker
 
-The script includes an automatic version checker that runs when the server starts. It will:
-- Check for new versions on GitHub
-- Display the latest version information in the console
-- Show changelog entries for new updates
-- List specific files that need to be updated
-- Provide a download link to the latest release
+The script includes an automatic version checker that runs when the server starts.
 
 **Enjoy your advanced GPS system!** 📍🗺️
 

@@ -197,7 +197,6 @@ function renderMarkers() {
         return;
     }
     
-    // Filter markers based on search query
     const filteredMarkers = markers.filter((marker, index) => {
         if (!searchFilter) return true;
         return marker.label.toLowerCase().includes(searchFilter);

@@ -10,7 +10,6 @@ CREATE TABLE IF NOT EXISTS `core_gps_advanced` (
     KEY `gps_id` (`gps_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Table for GPS device registry
 CREATE TABLE IF NOT EXISTS `core_gps_advanced_devices` (
     `gps_id` varchar(100) NOT NULL,
     `allow_receive_locations` tinyint(1) NOT NULL DEFAULT 0,

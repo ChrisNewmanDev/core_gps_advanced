@@ -1,8 +1,17 @@
+:root {
+    --scale: 0.8;
+    --base-font-size: calc(14px * var(--scale));
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html {
+    font-size: var(--base-font-size);
 }
 
 body {
@@ -13,25 +22,104 @@ body {
     background: transparent;
 }
 
-.gps-container {
+.gps-ui-bg {
     display: none;
-    width: 450px;
-    background: linear-gradient(135deg, rgba(69, 71, 71, 0.6) 0%, rgba(129, 129, 129, 0.6) 100%);
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-    overflow: hidden;
-    border: 1px solid rgb(0, 0, 0);
+    position: relative;
+    width: min(100vw, 28.125rem);
+    aspect-ratio: 3/4;
+    margin: auto;
+    z-index: 10;
+    background: none;
 }
 
-.gps-container.active {
+@media screen and (max-width: 1366px) {
+    :root {
+        --scale: 0.68;
+    }
+}
+
+@media screen and (max-width: 1280px) {
+    :root {
+        --scale: 0.64;
+    }
+}
+
+@media screen and (min-width: 1920px) {
+    :root {
+        --scale: 0.92;
+    }
+}
+
+@media screen and (min-width: 2560px) {
+    :root {
+        --scale: 1.12;
+    }
+}
+
+#gpsBgImage {
+    width: 100%;
+    height: 150%;
+    object-fit: contain;
+    border-radius: 1.286rem;
+    box-shadow: none;
+    position: absolute;
+    top: -25%;
+    left: 1%;
+    background: #22222200;
+    border: none;
+    z-index: 0;
+    display: block;
+}
+
+.gps-ui-bg.active {
     display: block;
     animation: slideIn 0.3s ease-out;
+}
+
+.gps-overlay-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    pointer-events: none;
+}
+
+.gps-header, .gps-content, .section, .input-group, .toggle-section, .markers-section, .search-group, .markers-list {
+    pointer-events: auto;
+}
+
+.gps-header {
+    margin-top: 2.857rem;
+    background: none !important;
+    padding: 0 0 0.5rem 0;
+    width: 75%;
+    color: #fff;
+    text-align: center;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.input-group input[type="text"], .search-group input[type="text"], .modal-content input {
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.btn {
+    opacity: 0.95;
 }
 
 @keyframes slideIn {
     from {
         opacity: 0;
-        transform: translateY(-20px);
+        transform: translateY(-1.429rem);
     }
     to {
         opacity: 1;
@@ -39,18 +127,8 @@ body {
     }
 }
 
-.gps-header {
-    background: rgba(100, 154, 255, 0.15);
-    padding: 18px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: white;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
 .gps-header h2 {
-    font-size: 20px;
+    font-size: 1.429rem;
     font-weight: 600;
 }
 
@@ -58,91 +136,92 @@ body {
     background: rgba(255, 255, 255, 0.08);
     border: none;
     color: white;
-    font-size: 28px;
+    font-size: 2rem;
     cursor: pointer;
     padding: 0;
-    width: 32px;
-    height: 32px;
+    width: 2.286rem;
+    height: 2.286rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
+    border-radius: 0.571rem;
     transition: all 0.2s ease;
 }
 
 .close-btn:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.25);
 }
 
 .gps-content {
-    padding: 20px;
-    max-height: 600px;
+    padding: 0.857rem;
+    max-height: 42.857rem;
     overflow-y: auto;
+    width: 75%;
 }
 
 .gps-content::-webkit-scrollbar {
-    width: 8px;
+    width: 0.714rem;
 }
 
 .gps-content::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0.05);
-    border-radius: 4px;
+    border-radius: 0.286rem;
 }
 
 .gps-content::-webkit-scrollbar-thumb {
-    background: rgba(100, 154, 255, 0.4);
-    border-radius: 4px;
+    background: rgba(134, 134, 134, 0.6);
+    border-radius: 0.286rem;
 }
 
 .gps-content::-webkit-scrollbar-thumb:hover {
-    background: rgba(100, 154, 255, 0.6);
+    background: rgba(233, 233, 233, 0.6);
 }
 
 .section {
-    margin-bottom: 20px;
+    margin-bottom: 1rem;
 }
 
 .input-group {
     display: flex;
-    gap: 10px;
+    gap: 0.857rem;
     flex-direction: column;
 }
 
 .input-group input[type="text"] {
-    padding: 12px;
+    padding: 0.571rem 0.714rem;
     border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 8px;
+    border-radius: 0.429rem;
     background: rgba(255, 255, 255, 0.08);
     color: white;
-    font-size: 14px;
+    font-size: 0.929rem;
     transition: all 0.2s ease;
 }
 
 .input-group input[type="text"]:focus {
     outline: none;
-    border-color: rgba(100, 154, 255, 0.5);
+    border-color: rgba(0, 0, 0, 0.5);
     background: rgba(255, 255, 255, 0.12);
 }
 
 .btn {
-    padding: 12px 20px;
+    padding: 0.643rem 1.071rem;
     border: none;
-    border-radius: 8px;
+    border-radius: 0.429rem;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 0.929rem;
     font-weight: 500;
     transition: all 0.2s ease;
     text-align: center;
 }
 
 .btn-primary {
-    background: rgba(100, 154, 255, 0.8);
+    background: rgba(109, 124, 41, 0.8);
     color: white;
 }
 
 .btn-primary:hover {
-    background: rgba(100, 154, 255, 1);
-    box-shadow: 0 4px 12px rgba(100, 154, 255, 0.3);
+    background: rgba(168, 192, 60, 0.8);
+    box-shadow: 0 0.286rem 0.857rem rgba(168, 192, 60, 0.3);
 }
 
 .btn-secondary {
@@ -183,8 +262,8 @@ body {
 
 .toggle-section {
     background: rgba(255, 255, 255, 0.06);
-    padding: 15px;
-    border-radius: 8px;
+    padding: 0.714rem 0.857rem;
+    border-radius: 0.429rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -202,10 +281,10 @@ body {
 }
 
 .toggle-slider {
-    width: 50px;
-    height: 26px;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 13px;
+    width: 3.571rem;
+    height: 1.857rem;
+    background: rgba(70, 70, 70, 0.5);
+    border-radius: 0.929rem;
     position: relative;
     transition: background 0.3s ease;
 }
@@ -213,105 +292,107 @@ body {
 .toggle-slider::before {
     content: '';
     position: absolute;
-    width: 20px;
-    height: 20px;
+    width: 1.429rem;
+    height: 1.429rem;
     border-radius: 50%;
     background: white;
-    top: 3px;
-    left: 3px;
+    top: 0.214rem;
+    left: 0.214rem;
     transition: transform 0.3s ease;
 }
 
 .toggle-label input[type="checkbox"]:checked + .toggle-slider {
-    background: rgba(100, 154, 255, 0.8);
+    background: rgba(168, 192, 60, 0.8);
 }
 
 .toggle-label input[type="checkbox"]:checked + .toggle-slider::before {
-    transform: translateX(24px);
+    transform: translateX(1.714rem);
+    left: 0.214rem;
+    right: auto;
 }
 
 .markers-section h3 {
     color: white;
-    margin-bottom: 15px;
-    font-size: 16px;
+    margin-bottom: 1.071rem;
+    font-size: 1.143rem;
 }
 
 .search-group {
-    margin-bottom: 12px;
+    margin-bottom: 0.857rem;
 }
 
 .search-group input[type="text"] {
     width: 100%;
-    padding: 10px 12px;
+    padding: 0.5rem 0.643rem;
     border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 8px;
+    border-radius: 0.429rem;
     background: rgba(255, 255, 255, 0.08);
     color: white;
-    font-size: 14px;
+    font-size: 0.929rem;
     transition: all 0.2s ease;
 }
 
 .search-group input[type="text"]:focus {
     outline: none;
-    border-color: rgba(100, 154, 255, 0.5);
+    border-color: rgba(0, 0, 0, 0.5);
     background: rgba(255, 255, 255, 0.12);
 }
 
 .markers-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0.714rem;
 }
 
 .marker-item {
     background: rgba(255, 255, 255, 0.06);
-    padding: 12px;
-    border-radius: 8px;
+    padding: 0.643rem 0.714rem;
+    border-radius: 0.429rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.2s ease;
 }
 
 .marker-item:hover {
     background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(100, 154, 255, 0.3);
+    border-color: rgba(0, 0, 0, 0.5);
 }
 
 .marker-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 0.571rem;
 }
 
 .marker-label {
     color: white;
     font-weight: 600;
-    font-size: 15px;
+    font-size: 1.071rem;
 }
 
 .marker-actions {
     display: flex;
-    gap: 8px;
+    gap: 0.357rem;
 }
 
 .marker-btn {
-    padding: 6px 12px;
+    padding: 0.286rem 0.5rem;
     border: none;
-    border-radius: 6px;
+    border-radius: 0.357rem;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 0.714rem;
     font-weight: 500;
     transition: all 0.2s ease;
     flex: 1;
 }
 
 .marker-btn.waypoint {
-    background: rgba(52, 152, 219, 0.7);
+    background: rgba(109, 124, 41, 0.8);
     color: white;
 }
 
 .marker-btn.waypoint:hover {
-    background: rgba(52, 152, 219, 1);
+    background: rgba(168, 192, 60, 0.8);
 }
 
 .marker-btn.share {
@@ -343,14 +424,14 @@ body {
 
 .empty-state {
     text-align: center;
-    padding: 40px 20px;
+    padding: 2.857rem 1.429rem;
     color: rgba(255, 255, 255, 0.5);
 }
 
 .empty-state svg {
-    width: 64px;
-    height: 64px;
-    margin-bottom: 15px;
+    width: 4.571rem;
+    height: 4.571rem;
+    margin-bottom: 1.071rem;
     opacity: 0.3;
 }
 
@@ -384,16 +465,16 @@ body {
 .modal-content {
     background: rgba(30, 30, 46, 0.15);
     backdrop-filter: blur(10px);
-    padding: 25px;
-    border-radius: 12px;
-    min-width: 320px;
+    padding: 1.786rem;
+    border-radius: 0.857rem;
+    min-width: 22.857rem;
     border: 1px solid rgba(255, 255, 255, 0.15);
     animation: slideUp 0.3s ease-out;
 }
 
 @keyframes slideUp {
     from {
-        transform: translateY(20px);
+        transform: translateY(1.429rem);
         opacity: 0;
     }
     to {
@@ -404,37 +485,37 @@ body {
 
 .modal-content h3 {
     color: white;
-    margin-bottom: 15px;
-    font-size: 18px;
+    margin-bottom: 1.071rem;
+    font-size: 1.286rem;
 }
 
 .modal-content p {
     color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 20px;
-    font-size: 14px;
+    margin-bottom: 1.429rem;
+    font-size: 1rem;
 }
 
 .modal-content input {
     width: 100%;
-    padding: 12px;
+    padding: 0.857rem;
     border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 8px;
+    border-radius: 0.571rem;
     background: rgba(255, 255, 255, 0.08);
     color: white;
-    font-size: 14px;
-    margin-bottom: 20px;
+    font-size: 1rem;
+    margin-bottom: 1.429rem;
     transition: all 0.2s ease;
 }
 
 .modal-content input:focus {
     outline: none;
-    border-color: rgba(100, 154, 255, 0.5);
+    border-color: rgba(0, 0, 0, 0.5);
     background: rgba(255, 255, 255, 0.12);
 }
 
 .modal-buttons {
     display: flex;
-    gap: 10px;
+    gap: 0.714rem;
 }
 
 .modal-buttons .btn {

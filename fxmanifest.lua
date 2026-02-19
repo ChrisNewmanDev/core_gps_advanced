@@ -3,10 +3,11 @@ game 'gta5'
 
 description 'core_gps - Location Marker Management System'
 author 'ChrisNewmanDev'
-version '1.0.4'
+version '1.1.0'
 
 shared_scripts {
-    'config.lua'
+    'config.lua',
+    'framework.lua'
 }
 
 client_scripts {
@@ -14,6 +15,7 @@ client_scripts {
 }
 
 server_scripts {
+    '@oxmysql/lib/MySQL.lua',
     'server/sv_gps.lua'
 }
 
@@ -23,6 +25,7 @@ files {
     'html/index.html',
     'html/style.css',
     'html/script.js',
+    'html/gps_ui.png',
     'version.json'
 }
 
