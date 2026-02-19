@@ -18,13 +18,7 @@ An advanced FiveM GPS Marker script with **multi-framework support** (QBCore, ES
 ## Some Screenshots
 
 
-![GPSA1](https://i.postimg.cc/Jh394g5K/GPSA1.png)
-
-![GPSA1](https://i.postimg.cc/brsK99Kv/GPSA4.png)
-
-![GPSA2](https://i.postimg.cc/rpGvFbNZ/GPSA2.png)
-
-![GPSA3](https://i.postimg.cc/vmwJyMf9/GPSA3.png)
+![GPS1](https://i.postimg.cc/JhsbyXYL/GPS1.png)
 
 ## 🌟 Key Features
 
