@@ -113,28 +113,92 @@ end)
 
 print('^2[' .. RESOURCE_NAME .. '] ^7Server initialized - v' .. CURRENT_VERSION)
 
-Framework.RegisterUsableItem(Config.ItemName, function(source, item)
-    if Framework.Type == 'esx' then
-        local inventory = exports.ox_inventory:GetInventory(source, false)
-        if inventory and inventory.items then
-            local gpsItem = nil
-            for slot, invItem in pairs(inventory.items) do
-                if invItem and invItem.name == Config.ItemName then
-                    if invItem.metadata and invItem.metadata.gps_id then
-                        gpsItem = invItem
-                        break
-                    end
-                end
-            end
-            if gpsItem then
-                TriggerClientEvent('core_gps:client:useItem', source, gpsItem)
-            else
-                Framework.Notify(source, 'GPS device not properly registered! Please get a new one.', 'error')
+local function GetItemSlot(source, itemName)
+    if Framework.Type == 'qbcore' or Framework.Type == 'qbox' then
+        local Player = Framework.GetPlayer(source)
+        if not Player then return nil end
+        for slot, item in pairs(Player.PlayerData.items) do
+            if item and item.name == itemName then
+                return slot, item
             end
         end
-    else
-        TriggerClientEvent('core_gps:client:useItem', source, item)
+    elseif Framework.Type == 'esx' then
+        local inventory = exports.ox_inventory:GetInventory(source, false)
+        if inventory and inventory.items then
+            for slot, item in pairs(inventory.items) do
+                if item and item.name == itemName then
+                    return slot, item
+                end
+            end
+        end
     end
+    return nil, nil
+end
+
+local function UpdateItemMetadata(source, slot, itemName, metadata)
+    if Framework.Type == 'qbcore' or Framework.Type == 'qbox' then
+        local Player = Framework.GetPlayer(source)
+        if not Player then return false end
+        Player.PlayerData.items[slot].info = metadata
+        Player.Functions.SetInventory(Player.PlayerData.items, true)
+        return true
+    elseif Framework.Type == 'esx' then
+        return exports.ox_inventory:SetMetadata(source, slot, metadata)
+    end
+    return false
+end
+
+Framework.RegisterUsableItem(Config.ItemName, function(source, item)
+    local slot, itemData = GetItemSlot(source, Config.ItemName)
+    
+    if not itemData then
+        Framework.Notify(source, 'GPS device not found in inventory!', 'error')
+        return
+    end
+    
+    -- Check if item has gps_id metadata
+    local hasMetadata = false
+    local gpsId = nil
+    
+    if Framework.Type == 'qbcore' or Framework.Type == 'qbox' then
+        if itemData.info and itemData.info.gps_id then
+            hasMetadata = true
+            gpsId = itemData.info.gps_id
+        end
+    elseif Framework.Type == 'esx' then
+        if itemData.metadata and itemData.metadata.gps_id then
+            hasMetadata = true
+            gpsId = itemData.metadata.gps_id
+        end
+    end
+    
+    -- If no metadata, auto-register the device
+    if not hasMetadata then
+        local Player = Framework.GetPlayer(source)
+        if not Player then return end
+        
+        local playerName = Framework.GetPlayerName(Player)
+        gpsId = GenerateGPSId(playerName)
+        
+        -- Insert into database
+        Framework.DBInsert('INSERT INTO core_gps_advanced_devices (gps_id) VALUES (?)', {gpsId})
+        
+        -- Update item metadata
+        local metadata = {gps_id = gpsId}
+        UpdateItemMetadata(source, slot, Config.ItemName, metadata)
+        
+        -- Update itemData with new metadata
+        if Framework.Type == 'qbcore' or Framework.Type == 'qbox' then
+            itemData.info = metadata
+        elseif Framework.Type == 'esx' then
+            itemData.metadata = metadata
+        end
+        
+        Framework.Notify(source, 'GPS Device Registered! ID: ' .. gpsId, 'success')
+    end
+    
+    -- Send to client
+    TriggerClientEvent('core_gps:client:useItem', source, itemData)
 end)
 
 function GenerateGPSId(playerName)
